@@ -1,7 +1,8 @@
-package main
+package db
 
 import (
 	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func SqlConnection() *sql.DB {
@@ -10,5 +11,7 @@ func SqlConnection() *sql.DB {
 	if err != nil {
 		panic(err.Error())
 	}
+	defer db.Close()
+
 	return db
 }
