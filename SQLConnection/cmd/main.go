@@ -2,6 +2,7 @@ package main
 
 import (
 	"SQLConnection/internal/controllers"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,11 +13,11 @@ func main() {
 
 	router.GET("/albums", controllers.GetAlbums)
 
-	router.GET("/albums/:id", controllers.GetAlbumByID)
+	// router.GET("/albums/:id", controllers.GetAlbumByID)
 
-	//uses the POST function also to associate the
-	//post method to the path
-	router.POST("/albums", controllers.PostAlbums)
+	//uses the PUT function also to associate the
+	//put method to the path
+	router.PUT("/albums", controllers.PutAlbum)
 
 	//attaches the router to an http.Server and starts the server
 	router.Run("localhost:8080")
