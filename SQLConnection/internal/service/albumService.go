@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllAlbums(c *gin.Context) []model.Album {
-	return db.GetAllAlbumsFromDb(c)
+func GetAllAlbums(c *gin.Context) {
+	db.GetAllAlbumsFromDb(c)
 }
 
 func PutAlbum(c *gin.Context) {
@@ -25,6 +25,6 @@ func PutAlbum(c *gin.Context) {
 		Price:  input.Price,
 	}
 
-	db.PutAlbumToDb(&album)
+	db.PutAlbumToDb(c, &album)
 	return
 }

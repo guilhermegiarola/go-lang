@@ -3,7 +3,8 @@ package db
 import (
 	"SQLConnection/internal/model"
 	"context"
-	"fmt"
+	"encoding/json"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -24,12 +25,12 @@ func OpenConnection() *mongo.Collection {
 	return client.Database("testing").Collection("Albums")
 }
 
-func PutAlbumToDb(album *model.Album) {
+func PutAlbumToDb(c *gin.Context, album *model.Album) {
 	var collection = OpenConnection()
-	collection.InsertOne(context.TODO(), album)
+	collection.InsertOne(c, album)
 }
 
-func GetAllAlbumsFromDb(c *gin.Context) []model.Album {
+func GetAllAlbumsFromDb(c *gin.Context) {
 	var collection = OpenConnection()
 	var albums []model.Album
 	cursor, err := collection.Find(c, bson.M{})
@@ -45,6 +46,11 @@ func GetAllAlbumsFromDb(c *gin.Context) []model.Album {
 		}
 		albums = append(albums, result)
 	}
-	fmt.Println(albums)
-	return albums
+
+	out, err := json.Marshal(albums)
+	if err != nil {
+		panic(err)
+	}
+	c.String(http.StatusOK, string(out))
+	return
 }
