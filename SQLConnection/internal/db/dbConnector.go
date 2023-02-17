@@ -25,9 +25,35 @@ func OpenConnection() *mongo.Collection {
 	return client.Database("testing").Collection("Albums")
 }
 
-func PutAlbumToDb(c *gin.Context, album *model.Album) {
+func PostAlbumToDb(c *gin.Context, album *model.Album) {
 	var collection = OpenConnection()
 	collection.InsertOne(c, album)
+}
+
+func GetAlbumFromDb(c *gin.Context, title string) {
+	var collection = OpenConnection()
+	var out []model.Album
+	var result model.Album
+
+	cursor, err := collection.Find(c, bson.M{})
+	cursor.All(c, bson.M{})
+	for cursor.TryNext(c) {
+		err := cursor.Decode(&result)
+		if err != nil {
+			panic(err)
+		}
+		if result.Title == title {
+			out = append(out, result)
+		}
+	}
+
+	res, err := json.Marshal(out)
+	if err != nil {
+		panic(err)
+	}
+
+	c.String(http.StatusOK, string(res))
+	return
 }
 
 func GetAllAlbumsFromDb(c *gin.Context) {

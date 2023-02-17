@@ -11,13 +11,20 @@ func main() {
 	//associate the method to the path
 	router := gin.Default()
 
-	router.GET("/albums", controllers.GetAlbums)
+	router.Handle("GET", "/albums", func(c *gin.Context) {
+		title := c.Query("title")
+		if title != "" {
+			controllers.GetAlbumByTitle(c)
+		} else {
+			controllers.GetAlbums(c)
+		}
+	})
 
-	// router.GET("/albums/:id", controllers.GetAlbumByID)
+	//router.GET("/albums", controllers.GetAlbums)
 
-	//uses the PUT function also to associate the
-	//put method to the path
-	router.PUT("/albums", controllers.PutAlbum)
+	//uses the POST function also to associate the
+	//post method to the path
+	router.POST("/albums", controllers.PostAlbum)
 
 	//attaches the router to an http.Server and starts the server
 	router.Run("localhost:8080")

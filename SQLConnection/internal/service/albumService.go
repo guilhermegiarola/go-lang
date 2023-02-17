@@ -12,7 +12,11 @@ func GetAllAlbums(c *gin.Context) {
 	db.GetAllAlbumsFromDb(c)
 }
 
-func PutAlbum(c *gin.Context) {
+func GetAlbumByTitle(c *gin.Context, title string) {
+	db.GetAlbumFromDb(c, title)
+}
+
+func PostAlbum(c *gin.Context) {
 	var input model.Album
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -25,6 +29,6 @@ func PutAlbum(c *gin.Context) {
 		Price:  input.Price,
 	}
 
-	db.PutAlbumToDb(c, &album)
+	db.PostAlbumToDb(c, &album)
 	return
 }

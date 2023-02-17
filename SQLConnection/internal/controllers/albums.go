@@ -10,6 +10,11 @@ func GetAlbums(c *gin.Context) {
 	service.GetAllAlbums(c)
 }
 
-func PutAlbum(c *gin.Context) {
-	service.PutAlbum(c)
+func GetAlbumByTitle(c *gin.Context) {
+	title := c.Query("title")
+	service.GetAlbumByTitle(c, title)
+}
+
+func PostAlbum(c *gin.Context) {
+	service.PostAlbum(c)
 }
